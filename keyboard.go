@@ -21,6 +21,9 @@ type Keyboard interface {
 	// The key can be any of the predefined keycodes from keycodes.go.
 	KeyUp(key int) error
 
+	// File will return non duplicated underlying os.File
+	File() *os.File
+
 	io.Closer
 }
 
@@ -87,6 +90,11 @@ func (vk vKeyboard) KeyUp(key int) error {
 // It's usually a good idea to use defer to call this function.
 func (vk vKeyboard) Close() error {
 	return closeDevice(vk.deviceFile)
+}
+
+// File will return non duplicated underlying os.File
+func (vk vKeyboard) File() *os.File {
+	return vk.deviceFile
 }
 
 func createVKeyboardDevice(path string, name []byte) (fd *os.File, err error) {
